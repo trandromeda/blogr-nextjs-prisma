@@ -6,9 +6,16 @@ import { useSession, getSession } from 'next-auth/react';
 import Layout from '../components/Layout';
 import Post, { PostProps } from '../components/Post';
 import prisma from '../lib/prisma';
+import { getServerSession } from 'next-auth';
+import { options } from './api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(
+    req,
+    res,
+    options
+  )
+  
   if (!session) {
     res.statusCode = 403;
     return { props: { drafts: [] } };
